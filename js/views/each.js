@@ -5,6 +5,8 @@ export default function(data) {
     <li><i class="fa fa-envelope"></i>${data.Email}</li>
     <li><i class="fa fa-phone"></i>${data.PhoneNumber}</li>
     <li><i class="fa fa-map-marker"></i>${data.Location}</li>
+    <button class="contact-edit-item" data-to="edit"><i class="fa  fa-pencil"></i>Edit Contact</button>
+
   `;
 
 }

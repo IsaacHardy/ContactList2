@@ -2080,7 +2080,7 @@ li {
   background-color: #FF9966;
   color: white; }
 
-.contact-add-item, .submit-btn {
+.contact-add-item, .submit-btn, .contact-edit-item {
   border: none;
   outline: none;
   background-color: #FF9966;
@@ -2088,7 +2088,7 @@ li {
   margin-left: 36%;
   margin-top: 4%;
   padding: 10px; }
-  .contact-add-item:hover, .submit-btn:hover {
+  .contact-add-item:hover, .submit-btn:hover, .contact-edit-item:hover {
     box-shadow: 0 0 2px black; }
 
 .submit-btn {

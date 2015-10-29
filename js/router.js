@@ -1,7 +1,7 @@
 import Backbone from 'backbone';
 import $ from 'jquery';
 import {ContactCollection, ContactModel} from './resources';
-import {List, Each, Add, Spinner} from './views';
+import {List, Each, Add, Spinner, Edit} from './views';
 
 export default Backbone.Router.extend({
 
@@ -9,7 +9,8 @@ export default Backbone.Router.extend({
     ""         : "redirectToList",
     "list"     : "showList",
     "each/:id" : "showEach",
-    "add"      : "showAdd"
+    "add"      : "showAdd",
+    "edit/:id" : "showEdit"
   },
 
   initialize(appElement) {
@@ -19,6 +20,7 @@ export default Backbone.Router.extend({
     this.$el.on('click', '.contact-list-item', (event) => {
       let $li = $(event.currentTarget);
       let contactId = $li.data('contact-id');
+      console.log(contactId);
       this.navigate(`each/${contactId}`, {trigger: true});
     });
 
@@ -26,12 +28,20 @@ export default Backbone.Router.extend({
       let $button = $(event.currentTarget);
       let route = $button.data('to');
       this.navigate(route, {trigger: true});
+
     });
 
     this.$el.on('click', '.contact-add-item', (event) => {
       let $button = $(event.currentTarget);
       let route = $button.data('to');
       this.navigate(route, {trigger: true});
+    });
+
+    this.$el.on('click', '.contact-edit-item', (event) => {
+      let $li = $(event.currentTarget);
+      let contactId = $li.data('contact-id');
+      console.log($li);
+      this.navigate(`edit/${contactId}`, {trigger: true});
     });
 
     this.$el.on('click', '.submit-btn', (event) => {
@@ -60,7 +70,7 @@ export default Backbone.Router.extend({
       this.$el.html(List(this.collection.toJSON()));
 
     });
-    
+
 
 
   },
@@ -88,6 +98,26 @@ export default Backbone.Router.extend({
   showAdd() {
     this.showSpinner();
     this.$el.html(Add(this.collection.toJSON()));
+  },
+
+  showEdit(id) {
+    let contact = this.collection.get(id);
+    
+    if (contact) {
+      this.$el.html(Edit(contact.templateData()));
+    } else {
+      this.showSpinner();
+      contact = this.collection.add({objectId: id});
+      contact.fetch().then(() => {
+        this.$el.html(
+          Edit(
+            contact.templateData()
+          )
+        );
+      });
+    }
+
+    
   },
 
   redirectToList() {

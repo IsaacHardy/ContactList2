@@ -16,7 +16,7 @@ _jquery2['default'].ajaxSetup({
   }
 });
 
-},{"./parse_data":3,"jquery":14}],2:[function(require,module,exports){
+},{"./parse_data":3,"jquery":15}],2:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -39,7 +39,7 @@ var $app = (0, _jquery2['default'])('.app');
 
 new _router2['default']($app).start();
 
-},{"./ajax_setup":1,"./router":7,"jquery":14,"underscore":15}],3:[function(require,module,exports){
+},{"./ajax_setup":1,"./router":7,"jquery":15,"underscore":16}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -85,7 +85,7 @@ exports['default'] = _backbone2['default'].Collection.extend({
 });
 module.exports = exports['default'];
 
-},{"../parse_data":3,"./contactModel":5,"backbone":13}],5:[function(require,module,exports){
+},{"../parse_data":3,"./contactModel":5,"backbone":14}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -114,7 +114,7 @@ exports['default'] = _backbone2['default'].Model.extend({
 });
 module.exports = exports['default'];
 
-},{"../parse_data":3,"backbone":13}],6:[function(require,module,exports){
+},{"../parse_data":3,"backbone":14}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -161,7 +161,8 @@ exports['default'] = _backbone2['default'].Router.extend({
     "": "redirectToList",
     "list": "showList",
     "each/:id": "showEach",
-    "add": "showAdd"
+    "add": "showAdd",
+    "edit/:id": "showEdit"
   },
 
   initialize: function initialize(appElement) {
@@ -173,6 +174,7 @@ exports['default'] = _backbone2['default'].Router.extend({
     this.$el.on('click', '.contact-list-item', function (event) {
       var $li = (0, _jquery2['default'])(event.currentTarget);
       var contactId = $li.data('contact-id');
+      console.log(contactId);
       _this.navigate('each/' + contactId, { trigger: true });
     });
 
@@ -186,6 +188,13 @@ exports['default'] = _backbone2['default'].Router.extend({
       var $button = (0, _jquery2['default'])(event.currentTarget);
       var route = $button.data('to');
       _this.navigate(route, { trigger: true });
+    });
+
+    this.$el.on('click', '.contact-edit-item', function (event) {
+      var $li = (0, _jquery2['default'])(event.currentTarget);
+      var contactId = $li.data('contact-id');
+      console.log($li);
+      _this.navigate('edit/' + contactId, { trigger: true });
     });
 
     this.$el.on('click', '.submit-btn', function (event) {
@@ -236,6 +245,22 @@ exports['default'] = _backbone2['default'].Router.extend({
     this.$el.html((0, _views.Add)(this.collection.toJSON()));
   },
 
+  showEdit: function showEdit(id) {
+    var _this4 = this;
+
+    var contact = this.collection.get(id);
+
+    if (contact) {
+      this.$el.html((0, _views.Edit)(contact.templateData()));
+    } else {
+      this.showSpinner();
+      contact = this.collection.add({ objectId: id });
+      contact.fetch().then(function () {
+        _this4.$el.html((0, _views.Edit)(contact.templateData()));
+      });
+    }
+  },
+
   redirectToList: function redirectToList() {
     this.navigate('list', {
       replace: true,
@@ -255,7 +280,7 @@ exports['default'] = _backbone2['default'].Router.extend({
 });
 module.exports = exports['default'];
 
-},{"./resources":6,"./views":10,"backbone":13,"jquery":14}],8:[function(require,module,exports){
+},{"./resources":6,"./views":11,"backbone":14,"jquery":15}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -276,12 +301,30 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports["default"] = function (data) {
-  return "\n    <h2>" + data.FirstName + " " + data.LastName + "</h2>\n    <button class=\"back-btn\" data-to=\"list\"><i class=\"fa fa-arrow-left\"></i></button>\n    <li><i class=\"fa fa-envelope\"></i>" + data.Email + "</li>\n    <li><i class=\"fa fa-phone\"></i>" + data.PhoneNumber + "</li>\n    <li><i class=\"fa fa-map-marker\"></i>" + data.Location + "</li>\n  ";
+  return "\n    <h2>" + data.FirstName + " " + data.LastName + "</h2>\n    <button class=\"back-btn\" data-to=\"list\"><i class=\"fa fa-arrow-left\"></i></button>\n    <li><i class=\"fa fa-envelope\"></i>" + data.Email + "</li>\n    <li><i class=\"fa fa-phone\"></i>" + data.PhoneNumber + "</li>\n    <li><i class=\"fa fa-map-marker\"></i>" + data.Location + "</li>\n    <button class=\"contact-edit-item\" data-to=\"edit\"><i class=\"fa  fa-pencil\"></i>Edit Contact</button>\n\n  ";
 };
 
 module.exports = exports["default"];
 
 },{}],10:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+function processData(data) {
+  return data.map(function (item) {
+    return '\n      <form class="form-edit-item" data-contact-id="' + item.objectId + '">\n        <input class="input-first" type="text" placeholder="First Name">' + item.FirstName + '</input>\n        <input class="input-last" type="text" placeholder="Last Name">' + item.LastName + '</input>\n        <input class="input-email" type="email" placeholder="Email">' + item.Email + '</input>\n        <input class="input-phone" type="text" placeholder="Phone Number">' + item.PhoneNumber + '</input>\n        <input class="input-location" type="text" placeholder="Location">' + item.Location + '</input>\n      </form>\n    ';
+  }).join('');
+}
+
+exports['default'] = function (data) {
+  return '\n    <h2>Edit Contact Information</h2>\n    <div>' + processData(data) + '</div>\n    <button type="submit" class="submit-btn" data-to="list">Submit</button>\n    <button class="back-btn" data-to="list"><i class="fa fa-arrow-left"></i></button>\n  ';
+};
+
+module.exports = exports['default'];
+
+},{}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -306,12 +349,17 @@ var _spinner = require('./spinner');
 
 var _spinner2 = _interopRequireDefault(_spinner);
 
+var _edit = require('./edit');
+
+var _edit2 = _interopRequireDefault(_edit);
+
 exports.List = _list2['default'];
 exports.Each = _each2['default'];
 exports.Add = _add2['default'];
 exports.Spinner = _spinner2['default'];
+exports.Edit = _edit2['default'];
 
-},{"./add":8,"./each":9,"./list":11,"./spinner":12}],11:[function(require,module,exports){
+},{"./add":8,"./each":9,"./edit":10,"./list":12,"./spinner":13}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -329,7 +377,7 @@ exports['default'] = function (data) {
 
 module.exports = exports['default'];
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -342,7 +390,7 @@ exports["default"] = function () {
 
 module.exports = exports["default"];
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 (function (global){
 //     Backbone.js 1.2.3
 
@@ -2241,7 +2289,7 @@ module.exports = exports["default"];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"jquery":14,"underscore":15}],14:[function(require,module,exports){
+},{"jquery":15,"underscore":16}],15:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/
@@ -11453,7 +11501,7 @@ return jQuery;
 
 }));
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
