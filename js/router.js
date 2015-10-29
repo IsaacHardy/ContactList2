@@ -1,7 +1,7 @@
 import Backbone from 'backbone';
 import $ from 'jquery';
 import {ContactCollection, ContactModel} from './resources';
-import {List, Each, Add} from './views';
+import {List, Each, Add, Spinner} from './views';
 
 export default Backbone.Router.extend({
 
@@ -53,12 +53,14 @@ export default Backbone.Router.extend({
   },
 
   showList() {
-    
+
+    this.showSpinner();
     this.collection.fetch().then(() => {
 
       this.$el.html(List(this.collection.toJSON()));
 
     });
+    
 
 
   },
@@ -70,7 +72,7 @@ export default Backbone.Router.extend({
     if (contact) {
       this.$el.html(Each(contact.templateData()));
     } else {
-      // this.showSpinner();
+      this.showSpinner();
       contact = this.collection.add({objectId: id});
       contact.fetch().then(() => {
         this.$el.html(
@@ -84,6 +86,7 @@ export default Backbone.Router.extend({
   },
 
   showAdd() {
+    this.showSpinner();
     this.$el.html(Add(this.collection.toJSON()));
   },
 
@@ -94,6 +97,10 @@ export default Backbone.Router.extend({
     });
 
 
+  },
+
+  showSpinner() {
+    this.$el.html( Spinner() );
   },
 
   start() {
