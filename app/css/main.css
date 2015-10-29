@@ -2033,7 +2033,7 @@ html {
 h2 {
   font-size: 50px;
   color: #fff;
-  background-color: red;
+  background-color: #FF9966;
   width: 100%;
   text-align: center;
   margin-top: 0;
@@ -2077,13 +2077,13 @@ li {
   cursor: pointer; }
 
 .contact-list-item:hover > .fa-wheelchair:before {
-  background-color: red;
+  background-color: #FF9966;
   color: white; }
 
 .contact-add-item, .submit-btn {
   border: none;
   outline: none;
-  background-color: red;
+  background-color: #FF9966;
   color: white;
   margin-left: 36%;
   margin-top: 4%;

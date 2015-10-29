@@ -2,7 +2,7 @@
 @import "neat";
 @import "font-awesome";
 
-$primaryColor: red;
+$primaryColor: #FF9966;
 
 .app {
   width: 40%;
@@ -67,14 +67,14 @@ li {
 }
 
 .contact-list-item:hover > .fa-wheelchair:before {
-  background-color: red;
+  background-color: $primaryColor;
   color: white;
 }
 
 .contact-add-item, .submit-btn {
   border: none;
   outline: none;
-  background-color: red;
+  background-color: $primaryColor;
   color: white;
   margin-left: 36%;
   margin-top: 4%;
