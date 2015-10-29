@@ -257,7 +257,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports["default"] = function (data) {
-  return "\n    <form>\n      <input class=\"input-first\" type=\"text\" placeholder=\"First Name\"></input>\n      <input class=\"input-last\" type=\"text\" placeholder=\"Last Name\"></input>\n      <input class=\"input-email\" type=\"email\" placeholder=\"Email\"></input>\n      <input class=\"input-phone\" type=\"text\" placeholder=\"Phone Number\"></input>\n      <input class=\"input-location\" type=\"text\" placeholder=\"Location\"></input>\n      <button type=\"submit\" class=\"submit-btn\" data-to=\"list\">Submit</button>\n\n    </form>\n    <button class=\"back-btn\" data-to=\"list\"><i class=\"fa fa-arrow-left\"></i></button>\n  ";
+  return "\n    <h2>New Contact Information</h2>\n    <form>\n      <input class=\"input-first\" type=\"text\" placeholder=\"First Name\"></input>\n      <input class=\"input-last\" type=\"text\" placeholder=\"Last Name\"></input>\n      <input class=\"input-email\" type=\"email\" placeholder=\"Email\"></input>\n      <input class=\"input-phone\" type=\"text\" placeholder=\"Phone Number\"></input>\n      <input class=\"input-location\" type=\"text\" placeholder=\"Location\"></input>\n      <button type=\"submit\" class=\"submit-btn\" data-to=\"list\">Submit</button>\n\n    </form>\n    <button class=\"back-btn\" data-to=\"list\"><i class=\"fa fa-arrow-left\"></i></button>\n  ";
 };
 
 module.exports = exports["default"];
@@ -270,7 +270,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports["default"] = function (data) {
-  return "\n    <h2>" + data.FirstName + " " + data.LastName + "</h2>\n    <button class=\"back-btn\" data-to=\"list\"><i class=\"fa fa-arrow-left\"></i></button>\n    <li>" + data.Email + "<li>\n    <li>" + data.PhoneNumber + "<li>\n    <li>" + data.Location + "<li>\n  ";
+  return "\n    <h2>" + data.FirstName + " " + data.LastName + "</h2>\n    <button class=\"back-btn\" data-to=\"list\"><i class=\"fa fa-arrow-left\"></i></button>\n    <li><i class=\"fa fa-envelope\"></i>" + data.Email + "</li>\n    <li><i class=\"fa fa-phone\"></i>" + data.PhoneNumber + "</li>\n    <li><i class=\"fa fa-map-marker\"></i>" + data.Location + "</li>\n  ";
 };
 
 module.exports = exports["default"];
@@ -308,12 +308,12 @@ Object.defineProperty(exports, '__esModule', {
 });
 function processData(data) {
   return data.map(function (item) {
-    return '\n      <li class="contact-list-item" data-contact-id="' + item.objectId + '">\n        ' + item.FirstName + ' ' + item.LastName + '\n      </li>\n    ';
+    return '\n      <li class="contact-list-item" data-contact-id="' + item.objectId + '">\n        <i class="fa fa-wheelchair"></i>' + item.FirstName + ' ' + item.LastName + '\n      </li>\n    ';
   }).join('');
 }
 
 exports['default'] = function (data) {
-  return '\n    <div class="contact-list">\n      <h1>Contact List</h1>\n      <ul>' + processData(data) + '</ul>\n      <button class="contact-add-item" data-to="add">Add Contact</button>\n    </div>\n  ';
+  return '\n    <div class="contact-list">\n      <h2>Contact List</h2>\n      <ul>' + processData(data) + '</ul>\n      <button class="contact-add-item" data-to="add"><i class="fa  fa-plus-circle"></i>Add Contact</button>\n    </div>\n  ';
 };
 
 module.exports = exports['default'];

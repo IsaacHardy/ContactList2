@@ -2024,7 +2024,80 @@ html {
 .fa-fonticons:before {
   content: ""; }
 
-body {
-  background: #e2ebf3; }
+.app {
+  width: 40%;
+  margin-left: 10%;
+  padding-bottom: 30px;
+  border: 1px solid; }
+
+h2 {
+  font-size: 50px;
+  color: #fff;
+  background-color: red;
+  width: 100%;
+  text-align: center;
+  margin-top: 0;
+  padding: 20px; }
+
+ul {
+  padding-left: 0; }
+
+li {
+  list-style: none;
+  margin-top: 30px;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-bottom: 1px solid;
+  padding-bottom: 20px; }
+
+.fa {
+  margin-right: 10px; }
+
+.fa-wheelchair:before {
+  content: "";
+  font-size: 30px;
+  background-color: #DFE3E4;
+  padding: 10px;
+  border-radius: 50%;
+  color: black; }
+
+.fa-arrow-left:before {
+  content: "";
+  font-size: 35px; }
+
+.back-btn {
+  padding: 5px 25px;
+  position: absolute;
+  top: 10px;
+  background: transparent;
+  border: none;
+  outline: none; }
+
+.contact-list-item {
+  cursor: pointer; }
+
+.contact-list-item:hover > .fa-wheelchair:before {
+  background-color: red;
+  color: white; }
+
+.contact-add-item, .submit-btn {
+  border: none;
+  outline: none;
+  background-color: red;
+  color: white;
+  margin-left: 36%;
+  margin-top: 4%;
+  padding: 10px; }
+  .contact-add-item:hover, .submit-btn:hover {
+    box-shadow: 0 0 2px black; }
+
+.submit-btn {
+  width: 150px; }
+
+input {
+  display: block;
+  margin-left: 20%;
+  margin-top: 15px;
+  padding-right: 30%; }
 
 /*# sourceMappingURL=main.css.map */

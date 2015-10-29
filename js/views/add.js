@@ -1,5 +1,6 @@
 export default function(data) {
   return `
+    <h2>New Contact Information</h2>
     <form>
       <input class="input-first" type="text" placeholder="First Name"></input>
       <input class="input-last" type="text" placeholder="Last Name"></input>
