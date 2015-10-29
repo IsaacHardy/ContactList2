@@ -16,7 +16,7 @@ _jquery2['default'].ajaxSetup({
   }
 });
 
-},{"./parse_data":3,"jquery":12}],2:[function(require,module,exports){
+},{"./parse_data":3,"jquery":13}],2:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -39,7 +39,7 @@ var $app = (0, _jquery2['default'])('.app');
 
 new _router2['default']($app).start();
 
-},{"./ajax_setup":1,"./router":7,"jquery":12,"underscore":13}],3:[function(require,module,exports){
+},{"./ajax_setup":1,"./router":7,"jquery":13,"underscore":14}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -85,7 +85,7 @@ exports['default'] = _backbone2['default'].Collection.extend({
 });
 module.exports = exports['default'];
 
-},{"../parse_data":3,"./contactModel":5,"backbone":11}],5:[function(require,module,exports){
+},{"../parse_data":3,"./contactModel":5,"backbone":12}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -114,7 +114,7 @@ exports['default'] = _backbone2['default'].Model.extend({
 });
 module.exports = exports['default'];
 
-},{"../parse_data":3,"backbone":11}],6:[function(require,module,exports){
+},{"../parse_data":3,"backbone":12}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -160,7 +160,8 @@ exports['default'] = _backbone2['default'].Router.extend({
   routes: {
     "": "redirectToList",
     "list": "showList",
-    "each/:id": "showEach"
+    "each/:id": "showEach",
+    "add": "showAdd"
   },
 
   initialize: function initialize(appElement) {
@@ -178,6 +179,28 @@ exports['default'] = _backbone2['default'].Router.extend({
     this.$el.on('click', '.back-btn', function (event) {
       var $button = (0, _jquery2['default'])(event.currentTarget);
       var route = $button.data('to');
+      _this.navigate(route, { trigger: true });
+    });
+
+    this.$el.on('click', '.contact-add-item', function (event) {
+      var $button = (0, _jquery2['default'])(event.currentTarget);
+      var route = $button.data('to');
+      _this.navigate(route, { trigger: true });
+    });
+
+    this.$el.on('click', '.submit-btn', function (event) {
+      var contact = new _resources.ContactModel({
+        FirstName: (0, _jquery2['default'])('.input-first').val(),
+        LastName: (0, _jquery2['default'])('.input-last').val(),
+        Email: (0, _jquery2['default'])('.input-email').val(),
+        PhoneNumber: (0, _jquery2['default'])('.input-phone').val(),
+        Location: (0, _jquery2['default'])('.input-location').val()
+      });
+
+      contact.save();
+
+      var $submit = (0, _jquery2['default'])(event.currentTarget);
+      var route = $submit.data('to');
       _this.navigate(route, { trigger: true });
     });
   },
@@ -207,6 +230,10 @@ exports['default'] = _backbone2['default'].Router.extend({
     }
   },
 
+  showAdd: function showAdd() {
+    this.$el.html((0, _views.Add)(this.collection.toJSON()));
+  },
+
   redirectToList: function redirectToList() {
     this.navigate('list', {
       replace: true,
@@ -222,7 +249,20 @@ exports['default'] = _backbone2['default'].Router.extend({
 });
 module.exports = exports['default'];
 
-},{"./resources":6,"./views":9,"backbone":11,"jquery":12}],8:[function(require,module,exports){
+},{"./resources":6,"./views":10,"backbone":12,"jquery":13}],8:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports["default"] = function (data) {
+  return "\n    <form>\n      <input class=\"input-first\" type=\"text\" placeholder=\"First Name\"></input>\n      <input class=\"input-last\" type=\"text\" placeholder=\"Last Name\"></input>\n      <input class=\"input-email\" type=\"email\" placeholder=\"Email\"></input>\n      <input class=\"input-phone\" type=\"text\" placeholder=\"Phone Number\"></input>\n      <input class=\"input-location\" type=\"text\" placeholder=\"Location\"></input>\n      <button type=\"submit\" class=\"submit-btn\" data-to=\"list\">Submit</button>\n\n    </form>\n    <button class=\"back-btn\" data-to=\"list\"><i class=\"fa fa-arrow-left\"></i></button>\n  ";
+};
+
+module.exports = exports["default"];
+
+},{}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -235,7 +275,7 @@ exports["default"] = function (data) {
 
 module.exports = exports["default"];
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -252,10 +292,15 @@ var _each = require('./each');
 
 var _each2 = _interopRequireDefault(_each);
 
+var _add = require('./add');
+
+var _add2 = _interopRequireDefault(_add);
+
 exports.List = _list2['default'];
 exports.Each = _each2['default'];
+exports.Add = _add2['default'];
 
-},{"./each":8,"./list":10}],10:[function(require,module,exports){
+},{"./add":8,"./each":9,"./list":11}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -263,17 +308,17 @@ Object.defineProperty(exports, '__esModule', {
 });
 function processData(data) {
   return data.map(function (item) {
-    return '\n      <li class="contact-list-item" data-contact-id="' + item.objectId + '">\n        <span>' + item.FirstName + '</span>\n      </li>\n    ';
+    return '\n      <li class="contact-list-item" data-contact-id="' + item.objectId + '">\n        ' + item.FirstName + ' ' + item.LastName + '\n      </li>\n    ';
   }).join('');
 }
 
 exports['default'] = function (data) {
-  return '\n    <div class="contact-list">\n      <h1>Contact List</h1>\n      <ul>' + processData(data) + '</ul>\n    </div>\n  ';
+  return '\n    <div class="contact-list">\n      <h1>Contact List</h1>\n      <ul>' + processData(data) + '</ul>\n      <button class="contact-add-item" data-to="add">Add Contact</button>\n    </div>\n  ';
 };
 
 module.exports = exports['default'];
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 (function (global){
 //     Backbone.js 1.2.3
 
@@ -2172,7 +2217,7 @@ module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"jquery":12,"underscore":13}],12:[function(require,module,exports){
+},{"jquery":13,"underscore":14}],13:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/
@@ -11384,7 +11429,7 @@ return jQuery;
 
 }));
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors

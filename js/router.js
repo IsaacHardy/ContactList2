@@ -1,14 +1,15 @@
 import Backbone from 'backbone';
 import $ from 'jquery';
-import {ContactCollection} from './resources';
-import {List, Each} from './views';
+import {ContactCollection, ContactModel} from './resources';
+import {List, Each, Add} from './views';
 
 export default Backbone.Router.extend({
 
   routes: {
-    "" : "redirectToList",
-    "list" : "showList",
-    "each/:id" : "showEach"
+    ""         : "redirectToList",
+    "list"     : "showList",
+    "each/:id" : "showEach",
+    "add"      : "showAdd"
   },
 
   initialize(appElement) {
@@ -24,6 +25,28 @@ export default Backbone.Router.extend({
     this.$el.on('click', '.back-btn', (event) => {
       let $button = $(event.currentTarget);
       let route = $button.data('to');
+      this.navigate(route, {trigger: true});
+    });
+
+    this.$el.on('click', '.contact-add-item', (event) => {
+      let $button = $(event.currentTarget);
+      let route = $button.data('to');
+      this.navigate(route, {trigger: true});
+    });
+
+    this.$el.on('click', '.submit-btn', (event) => {
+      let contact = new ContactModel({
+        FirstName : $('.input-first').val(),
+        LastName : $('.input-last').val(),
+        Email: $('.input-email').val(),
+        PhoneNumber: $('.input-phone').val(),
+        Location: $('.input-location').val()
+      });
+
+      contact.save();
+
+      let $submit = $(event.currentTarget);
+      let route = $submit.data('to');
       this.navigate(route, {trigger: true});
     });
 
@@ -58,6 +81,10 @@ export default Backbone.Router.extend({
       });
     }
 
+  },
+
+  showAdd() {
+    this.$el.html(Add(this.collection.toJSON()));
   },
 
   redirectToList() {

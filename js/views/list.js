@@ -2,7 +2,7 @@ function processData(data) {
   return data.map(function(item){
     return `
       <li class="contact-list-item" data-contact-id="${item.objectId}">
-        <span>${item.FirstName}</span>
+        ${item.FirstName} ${item.LastName}
       </li>
     `;
   }).join('');
@@ -13,6 +13,7 @@ export default function(data) {
     <div class="contact-list">
       <h1>Contact List</h1>
       <ul>${processData(data)}</ul>
+      <button class="contact-add-item" data-to="add">Add Contact</button>
     </div>
   `;
 }
